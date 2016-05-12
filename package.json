@@ -1,8 +1,12 @@
 {
   "name": "ntbk",
   "version": "0.0.1",
-  "description": "A command-line journaling tool.",
+  "description": "A simple command-line journaling tool.",
   "main": "index.js",
+  "license": "MIT",
+  "bin": {
+    "ntbk": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/michaellee/ntbk.git"
@@ -15,5 +19,8 @@
     "node"
   ],
   "author": "Michael Lee",
-  "homepage": "https://github.com/michaellee/ntbk#readme"
+  "homepage": "https://github.com/michaellee/ntbk#readme",
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
 }
