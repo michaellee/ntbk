@@ -3,6 +3,7 @@ var program = require('commander')
 var fs = require('fs')
 var co = require('co')
 var prompt = require('co-prompt')
+var emojic = require('emojic')
 
 // Check if default journal exists
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
@@ -22,7 +23,7 @@ var addZero = function(value){
 
 var getTime = function(){
   var timestamp = new Date()
-  var now = timestamp.getFullYear() + '-' + (timestamp.getMonth() + 1) + '-' + timestamp.getDate() + ' ' + addZero(timestamp.getHours()) + ':' + addZero(timestamp.getMinutes())
+  var now = timestamp.getFullYear() + '-' + addZero(timestamp.getMonth() + 1) + '-' + addZero(timestamp.getDate()) + ' ' + addZero(timestamp.getHours()) + ':' + addZero(timestamp.getMinutes())
   return now
 }
 
@@ -43,7 +44,7 @@ if(fileExists){
   }else{
     var entry = program.args.join(' ')
     fs.appendFile(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
-    console.log('[Entry added to journal]')
+    console.log('[' + emojic.okHand + ' Entry added to notebook]')
   }
 }else{
   co(function *(){
@@ -53,6 +54,6 @@ if(fileExists){
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
     var entry = yield prompt('[Compose entry; press Ctrl+D to finish writing]\n')
     fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
-    console.log('[Entry added to journal]')
+    console.log('[' + emojic.okHand + ' Entry added to notebook]')
   })
 }
