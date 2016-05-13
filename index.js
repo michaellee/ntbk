@@ -34,6 +34,9 @@ try {
 }
 
 if(fileExists){
+  
+  var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'));
+  
   program
     .version('0.0.1')
     .arguments('<entry>')
@@ -43,7 +46,7 @@ if(fileExists){
     program.help()
   }else{
     var entry = program.args.join(' ')
-    fs.appendFile(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
+    fs.appendFile(obj.notebooks.default, getTime() + ' ' + entry + '\n\n')
     console.log('[' + emojic.okHand + ' Entry added to notebook]')
   }
 }else{
