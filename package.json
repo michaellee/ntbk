@@ -21,6 +21,8 @@
   "author": "Michael Lee",
   "homepage": "https://github.com/michaellee/ntbk#readme",
   "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
     "commander": "^2.9.0"
   }
 }
