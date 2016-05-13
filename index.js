@@ -47,7 +47,7 @@ if(fileExists){
   }
 }else{
   co(function *(){
-    var notebookPath = yield prompt('Path to your notebook file (leave blank for ~/notbook.txt): ')
+    var notebookPath = yield prompt('Path to your notebook file (leave blank for ' + home + '/notebook.txt): ')
     newConfigFile.notebooks.default = notebookPath ? notebookPath : newConfigFile.notebooks.default
     fs.closeSync(fs.openSync(defaultConfigPath, 'w'))
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
