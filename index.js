@@ -53,11 +53,15 @@ if (fileConfigExists) {
     .parse(process.argv)
 
   if (!program.args.length) {
-    program.help()
+    co(function * () {
+      var entry = yield prompt('[' + emojic.pencil2 + '  Start writing your entry. When you\'re done press Ctrl+C to save your entry]\n')
+      fs.appendFile(obj.notebooks.default, getTime() + ' ' + entry + '\n\n')
+      console.log('[' + emojic.v + '  Your entry was added to your notebook]')
+    })
   } else {
     var entry = program.args.join(' ')
     fs.appendFile(obj.notebooks.default, getTime() + ' ' + entry + '\n\n')
-    console.log('[' + emojic.v + ' Your entry was added to your notebook]')
+    console.log('[' + emojic.v + '  Your entry was added to your notebook]')
   }
 }
 // Else the config files doesn't exist, specify where to write entries,
@@ -68,8 +72,8 @@ else {
     newConfigFile.notebooks.default = notebookPath ? notebookPath : newConfigFile.notebooks.default
     fs.closeSync(fs.openSync(defaultConfigPath, 'w'))
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
-    var entry = yield prompt('[Compose entry; press Ctrl+D to finish writing]\n')
+    var entry = yield prompt('[Compose entry; press Ctrl+C to finish writing]\n')
     fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
-    console.log('[' + emojic.v + ' Your first entry was added to your notebook]')
+    console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
   })
 }
