@@ -39,7 +39,7 @@ var addZero = function (value) {
  */
 var getTime = function () {
   var timestamp = new Date()
-  var now = timestamp.getFullYear() + '-' + addZero(timestamp.getMonth() + 1) + '-' + addZero(timestamp.getDate()) + ' ' + addZero(timestamp.getHours()) + ':' + addZero(timestamp.getMinutes())
+  var now = timestamp.getFullYear() + '-' + addZero((timestamp.getMonth() + 1)) + '-' + addZero(timestamp.getDate()) + ' ' + addZero(timestamp.getHours()) + ':' + addZero(timestamp.getMinutes())
   return now
 }
 
