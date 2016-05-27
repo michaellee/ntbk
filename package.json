@@ -19,7 +19,7 @@
     "node"
   ],
   "author": "Michael Lee",
-  "homepage": "https://github.com/michaellee/ntbk#readme",
+  "homepage": "https://michaelsoolee.com/ntbk",
   "dependencies": {
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
