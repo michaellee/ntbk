@@ -43,14 +43,41 @@ var getTime = function () {
   return now
 }
 
+var isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n)
+}
+
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
 
   program
     .version('0.0.1')
+    .option('-l, --list [n]', 'List entries', parseInt)
     .arguments('<entry>')
     .parse(process.argv)
+
+  if (program.list) {
+    var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
+    // If the list option is passed a number, get the last number of entries 
+    // starting from the passed number, else list all entries
+    if (isNumber(program.list)) {
+      // Regex to split the string by entries into an array
+      var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
+      // Regex seems to insert a blank string between each entry, this removes them
+      lines = lines.filter(function (v) {return v !== ''})
+      // Determines the starting point from which to get all entries
+      var start = lines.length - program.list
+      var requestedEntries = []
+      for (var i = start; i <= lines.length; i++) {
+        requestedEntries.push(lines[i])
+      }
+      // Combine all entries back into a string
+      entries = requestedEntries.join('')
+    }
+    console.log(entries)
+    process.exit()
+  }
 
   if (!program.args.length) {
     co(function * () {
@@ -81,7 +108,7 @@ else {
 }
 
 // Handle exits with CTRL+C
-process.on('SIGINT', function(){
+process.on('SIGINT', function () {
   console.log('\n[' + emojic.sob + '  Nothing was added to your notebook]')
   process.exit()
 })
