@@ -22,6 +22,24 @@ then hit enter to have the entry added to your designated notebook.
 
 Alternatively, you can type `ntbk` and hit return and then type your message. When you're ready to save your entry, hit return again.
 
+### Options
+
+#### -l, --list [n]
+
+You can see all your entries by using the `--list` option:
+
+```
+> ntbk --list
+```
+
+You can also pass a number to the `--list` option and it will return a subset of your entries. For example if you passed 2 it will return the last two *ntbk* entries.
+
+```
+> ntbk -l 2
+```
+
+The above uses the shorthand version `-l` of the `--list` option.
+
 ## Credit
 
 *ntbk* was inspired by the Python journaling app, [jrnl](https://github.com/maebert/jrnl).
