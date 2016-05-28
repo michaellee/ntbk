@@ -13,10 +13,9 @@
   },
   "keywords": [
     "journal",
-    "command",
-    "line",
-    "notebook",
-    "node"
+    "cli",
+    "command-line",
+    "notebook"
   ],
   "author": "Michael Lee",
   "homepage": "https://michaelsoolee.com/ntbk",
