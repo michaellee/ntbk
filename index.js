@@ -96,14 +96,22 @@ if (fileConfigExists) {
 // then write the first entry 
 else {
   co(function * () {
-    var notebookPath = yield prompt('Path to your notebook file (leave blank for ' + home + '/notebook.txt): ')
+    var notebookPath = yield prompt(emojic.greenBook + '  Where would you like to store your notebook? (leave blank for ' + home + '/notebook.txt): ')
     newConfigFile.notebooks.default = notebookPath ? notebookPath : newConfigFile.notebooks.default
     fs.closeSync(fs.openSync(defaultConfigPath, 'w'))
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
     var entry = yield prompt('[' + emojic.pencil2 + "  Start writing your entry. When you're done press return to save your entry]\n")
-    fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
-    console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
-    process.exit()
+    // Check to see if the file already exists
+    fs.stat(newConfigFile.notebooks.default, function(err){
+      if(!err){
+        fs.appendFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
+        console.log('[' + emojic.v + '  Your entry was added to your notebook]')
+      }else{
+        fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
+        console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
+      }
+      process.exit()  
+    })
   })
 }
 
