@@ -47,6 +47,10 @@ var isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n)
 }
 
+/**
+ * Returns all entries as an array
+ * @return {Array} lines
+ */
 var getEntries = function(){
   var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
   // Regex to split the string by entries into an array
@@ -68,22 +72,20 @@ if (fileConfigExists) {
     .parse(process.argv)
 
   if (program.list) {
-    var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
+    var entries = getEntries()
     // If the list option is passed a number, get the last number of entries 
     // starting from the passed number, else list all entries
     if (isNumber(program.list)) {
-      // Regex to split the string by entries into an array
-      var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
-      // Regex seems to insert a blank string between each entry, this removes them
-      lines = lines.filter(function (v) {return v !== ''})
       // Determines the starting point from which to get all entries
-      var start = lines.length - program.list
+      var start = entries.length - program.list
       var requestedEntries = []
-      for (var i = start; i <= lines.length; i++) {
-        requestedEntries.push(lines[i])
+      for (var i = start; i <= entries.length; i++) {
+        requestedEntries.push(entries[i])
       }
       // Combine all entries back into a string
       entries = requestedEntries.join('')
+    }else{
+      entries = entries.join('')
     }
     console.log(entries)
     process.exit()
