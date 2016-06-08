@@ -47,6 +47,15 @@ var isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n)
 }
 
+var getEntries = function(){
+  var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
+  // Regex to split the string by entries into an array
+  var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
+  // Regex seems to insert a blank string between each entry, this removes them
+  lines = lines.filter(function (v) {return v !== ''})
+  return lines
+}
+
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
@@ -54,6 +63,7 @@ if (fileConfigExists) {
   program
     .version('0.0.1')
     .option('-l, --list [n]', 'List entries', parseInt)
+    .option('-t, --tag <tagName>', 'List entries for tag')
     .arguments('<entry>')
     .parse(process.argv)
 
@@ -75,6 +85,19 @@ if (fileConfigExists) {
       // Combine all entries back into a string
       entries = requestedEntries.join('')
     }
+    console.log(entries)
+    process.exit()
+  }
+
+  if (program.tag) {
+    var entries = getEntries()
+    var requestedEntries = []
+    for (var i = 0; i < entries.length; i++) {
+      if(entries[i].indexOf('#'+program.tag) > -1){
+        requestedEntries.push(entries[i])
+      }
+    }
+    entries = requestedEntries.join('')
     console.log(entries)
     process.exit()
   }
@@ -102,15 +125,15 @@ else {
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
     var entry = yield prompt('[' + emojic.pencil2 + "  Start writing your entry. When you're done press return to save your entry]\n")
     // Check to see if the file already exists
-    fs.stat(newConfigFile.notebooks.default, function(err){
-      if(!err){
+    fs.stat(newConfigFile.notebooks.default, function (err) {
+      if (!err) {
         fs.appendFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your entry was added to your notebook]')
-      }else{
+      } else {
         fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
       }
-      process.exit()  
+      process.exit()
     })
   })
 }
