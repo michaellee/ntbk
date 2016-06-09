@@ -47,10 +47,3 @@ The above uses the shorthand version `-l` of the `--list` option.
 ## Make it better
 
 Help make *ntbk* better. If you're handy with some JavaScript and/or Node.js, feel free to create a pull-request. You could also [create a new issue](https://github.com/michaellee/ntbk/issues/new) on GitHub. If you have any questions feel free to shoot me a tweet [@michaelsoolee](https://twitter.com/michaelsoolee).
-
-## License
-
-[MIT][license] © [Michael Lee][website]
-
-[license]: http://showalicense.com/?fullname=Michael%20Lee%20(https%3A%2F%2Fmichaelsoolee.com)&year=2016#license-mit
-[website]: https://michaelsoolee.com

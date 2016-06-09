@@ -67,7 +67,7 @@ if (fileConfigExists) {
   program
     .version('0.0.1')
     .option('-l, --list [n]', 'List entries', parseInt)
-    .option('-t, --tag <tagName>', 'List entries for tag')
+    .option('-h, --hashtag <hashtag>', 'List entries that contain hashtag')
     .arguments('<entry>')
     .parse(process.argv)
 
@@ -91,11 +91,11 @@ if (fileConfigExists) {
     process.exit()
   }
 
-  if (program.tag) {
+  if (program.hashtag) {
     var entries = getEntries()
     var requestedEntries = []
     for (var i = 0; i < entries.length; i++) {
-      if(entries[i].indexOf('#'+program.tag) > -1){
+      if(entries[i].indexOf('#'+program.hashtag) > -1){
         requestedEntries.push(entries[i])
       }
     }
