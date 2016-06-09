@@ -40,7 +40,7 @@ You can also pass a number to the `--list` option and it will return a subset of
 
 The above uses the shorthand version `-l` of the `--list` option.
 
-#### -t, --tag <tag>
+#### -t, --tag \<tag\>
 
 As you write entries in *ntbk* you might want to group similar entries together. You can do this by using *tags*.
 
