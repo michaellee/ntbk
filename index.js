@@ -47,6 +47,19 @@ var isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n)
 }
 
+/**
+ * Returns all entries as an array
+ * @return {Array} lines
+ */
+var getEntries = function () {
+  var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
+  // Regex to split the string by entries into an array
+  var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
+  // Regex seems to insert a blank string between each entry, this removes them
+  lines = lines.filter(function (v) {return v !== ''})
+  return lines
+}
+
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
@@ -54,27 +67,39 @@ if (fileConfigExists) {
   program
     .version('0.0.1')
     .option('-l, --list [n]', 'List entries', parseInt)
+    .option('-t, --tag <tag>', 'List entries that contain tag')
     .arguments('<entry>')
     .parse(process.argv)
 
   if (program.list) {
-    var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
+    var entries = getEntries()
     // If the list option is passed a number, get the last number of entries 
     // starting from the passed number, else list all entries
     if (isNumber(program.list)) {
-      // Regex to split the string by entries into an array
-      var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
-      // Regex seems to insert a blank string between each entry, this removes them
-      lines = lines.filter(function (v) {return v !== ''})
       // Determines the starting point from which to get all entries
-      var start = lines.length - program.list
+      var start = entries.length - program.list
       var requestedEntries = []
-      for (var i = start; i <= lines.length; i++) {
-        requestedEntries.push(lines[i])
+      for (var i = start; i <= entries.length; i++) {
+        requestedEntries.push(entries[i])
       }
       // Combine all entries back into a string
       entries = requestedEntries.join('')
+    } else {
+      entries = entries.join('')
     }
+    console.log(entries)
+    process.exit()
+  }
+
+  if (program.tag) {
+    var entries = getEntries()
+    var requestedEntries = []
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].indexOf('#' + program.tag) > -1) {
+        requestedEntries.push(entries[i])
+      }
+    }
+    entries = requestedEntries.join('')
     console.log(entries)
     process.exit()
   }
@@ -102,15 +127,15 @@ else {
     fs.writeFileSync(defaultConfigPath, JSON.stringify(newConfigFile, '', 2))
     var entry = yield prompt('[' + emojic.pencil2 + "  Start writing your entry. When you're done press return to save your entry]\n")
     // Check to see if the file already exists
-    fs.stat(newConfigFile.notebooks.default, function(err){
-      if(!err){
+    fs.stat(newConfigFile.notebooks.default, function (err) {
+      if (!err) {
         fs.appendFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your entry was added to your notebook]')
-      }else{
+      } else {
         fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
       }
-      process.exit()  
+      process.exit()
     })
   })
 }
