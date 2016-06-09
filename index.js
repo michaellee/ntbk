@@ -51,7 +51,7 @@ var isNumber = function (n) {
  * Returns all entries as an array
  * @return {Array} lines
  */
-var getEntries = function(){
+var getEntries = function () {
   var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
   // Regex to split the string by entries into an array
   var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
@@ -67,7 +67,7 @@ if (fileConfigExists) {
   program
     .version('0.0.1')
     .option('-l, --list [n]', 'List entries', parseInt)
-    .option('-h, --hashtag <hashtag>', 'List entries that contain hashtag')
+    .option('-t, --tag <tag>', 'List entries that contain tag')
     .arguments('<entry>')
     .parse(process.argv)
 
@@ -84,18 +84,18 @@ if (fileConfigExists) {
       }
       // Combine all entries back into a string
       entries = requestedEntries.join('')
-    }else{
+    } else {
       entries = entries.join('')
     }
     console.log(entries)
     process.exit()
   }
 
-  if (program.hashtag) {
+  if (program.tag) {
     var entries = getEntries()
     var requestedEntries = []
     for (var i = 0; i < entries.length; i++) {
-      if(entries[i].indexOf('#'+program.hashtag) > -1){
+      if (entries[i].indexOf('#' + program.tag) > -1) {
         requestedEntries.push(entries[i])
       }
     }
