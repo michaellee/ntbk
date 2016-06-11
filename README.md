@@ -70,6 +70,11 @@ The shorthand version of `--tag` is `-t`.
 
 ## Changelog
 
+### v0.3.1
+
+- Updated *ntbk* version number
+- Updated [emojic package](https://github.com/IonicaBizau/emojic) to 1.1.5
+
 ### v0.3.0
 
 You can now group entries together using tags. To list all the entries around a tag, you can pass in the `--tag` option followed by a tag.
