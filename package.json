@@ -1,6 +1,6 @@
 {
   "name": "ntbk",
-  "version": "0.1.0",
+  "version": "v0.3.1",
   "description": "A simple command-line journaling tool.",
   "main": "index.js",
   "license": "MIT",
@@ -23,6 +23,6 @@
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
-    "emojic": "^1.1.2"
+    "emojic": "^1.1.5"
   }
 }
