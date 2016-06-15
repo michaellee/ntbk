@@ -1,6 +1,6 @@
 {
   "name": "ntbk",
-  "version": "0.3.1",
+  "version": "v0.4.0",
   "description": "A simple command-line journaling tool.",
   "main": "index.js",
   "license": "MIT",
@@ -15,7 +15,8 @@
     "journal",
     "cli",
     "command-line",
-    "notebook"
+    "notebook",
+    "javascript"
   ],
   "author": "Michael Lee",
   "homepage": "https://michaelsoolee.com/ntbk",

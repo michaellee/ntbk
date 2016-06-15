@@ -60,10 +60,22 @@ var getEntries = function () {
   return lines
 }
 
+/**
+ * Returns random integer
+ * @param {Number} min
+ * @param {Number} max
+ * @return {Number}
+ */
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+/**
+ * Pluralizes unit name
+ * @param {Number} value
+ * @param {String} unit
+ * @return {String} units or unit
+ */
 var pluralizeUnit = function (value, unit) {
   return value > 1 ? unit + 's' : unit
 }
@@ -73,9 +85,9 @@ if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
 
   program
-    .version('v0.3.1')
+    .version('v0.4.0')
     .option('-l, --list [n]', 'List entries', parseInt)
-    .option('-m, --moments [unit]', 'Relive moments from the past')
+    .option('-m, --moments [value_unit]', 'Relive moments from the past')
     .option('-t, --tag <tag>', 'List entries that contain tag')
     .arguments('<entry>')
     .parse(process.argv)
@@ -122,6 +134,10 @@ if (fileConfigExists) {
       }else if (query[1] == 'y') {
         year -= query[0]
       } else {
+        if(query.length == 1 && query[0].length <= 2 && typeof query[0] == 'string'){
+          console.log('[' + emojic.thinking + "  It looks like you forgot a value with your unit, try something like '2m']")
+          process.exit()
+        }
         console.log('[' + emojic.thinking + "  Hey that's not a recognized unit, use either 'd - day', 'm - month', 'y - year']")
         process.exit()
       }
