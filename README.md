@@ -98,12 +98,11 @@ The shorthand version of `--moments` is `-m`.
 
 ## Changelog
 
-### v0.4.0
-#### 2016-06-15
+### v0.4.0 / 2016-06-15
 
 Take a walk down memory lane with *ntbk*'s latest option `--moments`. The `--moments` option is like a time machine, retrieving entries from a year ago from your current day. For more notes on moments, [check out the documentation](https://github.com/michaellee/ntbk#-m---moments-value_unit).
 
-[See all releases](https://github.com/michaellee/ntbk/releases).
+[See all releases](https://github.com/michaellee/ntbk/releases)
 
 ## Credit
 
