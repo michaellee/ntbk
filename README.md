@@ -68,11 +68,39 @@ As you can see in the example above, the tag option doesn't need to have the has
 
 The shorthand version of `--tag` is `-t`.
 
+#### -m, --moments \[value_unit\]
+
+Like a time machine, the `--moments` option allows you to relive your past entries from a year go.
+
+```
+> ntbk --moments
+```
+
+If you didn't write any entries a year ago from your current day, no problem, *ntbk* will retrieve a random moment from your entries.
+
+The `--moments` option also allows you to pass in several time units to retrieve moments in time.
+
+Let's say instead of a year, I wanted to relive my moments from last month, I could do this:
+
+```
+> ntbk --moments 1m
+```
+
+As you can see the syntax goes, numerical value paired with a single character unit. The units of time that `--moments` recognizes are:
+
+```
+d - day
+m - month
+y - year
+```
+
+The shorthand version of `--moments` is `-m`.
+
 ## Changelog
 
-### v0.3.0
+### v0.4.0 - 2016-06-15
 
-You can now group entries together using tags. To list all the entries around a tag, you can pass in the `--tag` option followed by a tag.
+Take a walk down memory lane with *ntbk*'s latest option `--moments`. The `--moments` option is like a time machine, retrieving entries from a year ago from your current day. For more notes on moments, check out the documentation.
 
 [See all releases](https://github.com/michaellee/ntbk/releases).
 
