@@ -75,7 +75,7 @@ if (fileConfigExists) {
   program
     .version('v0.3.1')
     .option('-l, --list [n]', 'List entries', parseInt)
-    .option('-m, --memories [unit]', 'View entry from past')
+    .option('-m, --moments [unit]', 'Relive moments from the past')
     .option('-t, --tag <tag>', 'List entries that contain tag')
     .arguments('<entry>')
     .parse(process.argv)
@@ -100,7 +100,7 @@ if (fileConfigExists) {
     process.exit()
   }
 
-  if (program.memories) {
+  if (program.moments) {
     var entries = getEntries()
     var dateQuery = new Date
     var year = dateQuery.getFullYear()
@@ -113,8 +113,8 @@ if (fileConfigExists) {
       'm': 'month',
       'y': 'year'
     }
-    if (typeof program.memories != 'boolean') {
-      query = program.memories.match(/[a-zA-Z]+|[0-9]+/g)
+    if (typeof program.moments != 'boolean') {
+      query = program.moments.match(/[a-zA-Z]+|[0-9]+/g)
       if (query[1] == 'd') {
         date -= query[0]
       }else if (query[1] == 'm') {
@@ -133,7 +133,7 @@ if (fileConfigExists) {
       }
     }
     if (requestedEntries.length == 0) {
-      console.log('[' + emojic.tada + "  It looks like you don't have any memories from " + query[0] + ' ' + pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
+      console.log('[' + emojic.tada + "  It looks like you don't have any moments from " + query[0] + ' ' + pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
       entries = entries[getRandomInt(0, entries.length - 1)]
     } else {
       entries = requestedEntries.join('')
