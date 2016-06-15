@@ -52,7 +52,7 @@ I really think pizza is the best! #food
 
 The syntax is a word that describes your entry with a hash (#) symbol prepended. Tags can be used anywhere within your entry.
 
-When using tags while writing your entry, you might have to escape them using the backslash (\) character.
+When using tags while writing your entry, you might have to escape them using the backslash (\\) character.
 
 ```
 > ntbk Implemented tags in ntbk today \#dev
@@ -69,11 +69,6 @@ As you can see in the example above, the tag option doesn't need to have the has
 The shorthand version of `--tag` is `-t`.
 
 ## Changelog
-
-### v0.3.1
-
-- Updated *ntbk* version number
-- Updated [emojic package](https://github.com/IonicaBizau/emojic) to 1.1.5
 
 ### v0.3.0
 
