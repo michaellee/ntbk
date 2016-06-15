@@ -60,6 +60,10 @@ var getEntries = function () {
   return lines
 }
 
+var getRandomInt = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
@@ -67,6 +71,7 @@ if (fileConfigExists) {
   program
     .version('v0.3.1')
     .option('-l, --list [n]', 'List entries', parseInt)
+    .option('-m, --memories [unit]', 'View entry from past')
     .option('-t, --tag <tag>', 'List entries that contain tag')
     .arguments('<entry>')
     .parse(process.argv)
@@ -86,6 +91,42 @@ if (fileConfigExists) {
       entries = requestedEntries.join('')
     } else {
       entries = entries.join('')
+    }
+    console.log(entries)
+    process.exit()
+  }
+
+  if(program.memories){
+    var entries = getEntries()
+    var dateQuery = new Date
+    var year = dateQuery.getFullYear()
+    var month = dateQuery.getMonth() + 1
+    var date = dateQuery.getDate()
+    var requestedEntries = []
+    if(typeof program.memories != 'boolean'){
+      var query = program.memories.match(/[a-zA-Z]+|[0-9]+/g)
+      if(query[1] == 'd'){
+        date -= query[0]
+      }else if(query[1] == 'm'){
+        month -= query[0]
+      }else if(query[1] == 'y'){
+        year -= query[0]
+      }else{
+        console.log('[' + emojic.thinking + '  Time unit not recognized, use either \'d\', \'m\', \'y\']')
+        process.exit()
+      }
+    }
+    dateQuery = year + '-' + addZero(month) + '-' + addZero(date)
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].indexOf(dateQuery) > -1) {
+        requestedEntries.push(entries[i])
+      }
+    }
+    if(requestedEntries.length == 0){
+      console.log('[' + emojic.tada + '  It looks like you don\'t have any memories from a year ago...so here\'s a random one]')
+      entries = entries[getRandomInt(0, entries.length - 1)]
+    }else{
+      entries = requestedEntries.join('')
     }
     console.log(entries)
     process.exit()
