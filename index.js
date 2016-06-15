@@ -61,7 +61,11 @@ var getEntries = function () {
 }
 
 var getRandomInt = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+var pluralizeUnit = function (value, unit) {
+  return value > 1 ? unit + 's' : unit
 }
 
 // If config exists, write entry into existing notebook
@@ -96,23 +100,29 @@ if (fileConfigExists) {
     process.exit()
   }
 
-  if(program.memories){
+  if (program.memories) {
     var entries = getEntries()
     var dateQuery = new Date
     var year = dateQuery.getFullYear()
     var month = dateQuery.getMonth() + 1
     var date = dateQuery.getDate()
     var requestedEntries = []
-    if(typeof program.memories != 'boolean'){
-      var query = program.memories.match(/[a-zA-Z]+|[0-9]+/g)
-      if(query[1] == 'd'){
+    var query = ['1', 'y']
+    var units = {
+      'd': 'day',
+      'm': 'month',
+      'y': 'year'
+    }
+    if (typeof program.memories != 'boolean') {
+      query = program.memories.match(/[a-zA-Z]+|[0-9]+/g)
+      if (query[1] == 'd') {
         date -= query[0]
-      }else if(query[1] == 'm'){
+      }else if (query[1] == 'm') {
         month -= query[0]
-      }else if(query[1] == 'y'){
+      }else if (query[1] == 'y') {
         year -= query[0]
-      }else{
-        console.log('[' + emojic.thinking + '  Time unit not recognized, use either \'d\', \'m\', \'y\']')
+      } else {
+        console.log('[' + emojic.thinking + "  Hey that's not a recognized unit, use either 'd - day', 'm - month', 'y - year']")
         process.exit()
       }
     }
@@ -122,10 +132,10 @@ if (fileConfigExists) {
         requestedEntries.push(entries[i])
       }
     }
-    if(requestedEntries.length == 0){
-      console.log('[' + emojic.tada + '  It looks like you don\'t have any memories from a year ago...so here\'s a random one]')
+    if (requestedEntries.length == 0) {
+      console.log('[' + emojic.tada + "  It looks like you don't have any memories from " + query[0] + ' ' + pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
       entries = entries[getRandomInt(0, entries.length - 1)]
-    }else{
+    } else {
       entries = requestedEntries.join('')
     }
     console.log(entries)
