@@ -80,6 +80,38 @@ var pluralizeUnit = function (value, unit) {
   return value > 1 ? unit + 's' : unit
 }
 
+/**
+ * Emojifies number
+ * @param {Number} number
+ * @return {String} emojified number
+ */
+var emojifyNumber = function (number) {
+	var numbers = {
+		0: 'zero',
+		1: 'one',
+		2: 'two',
+		3: 'three',
+		4: 'four',
+		5: 'five',
+		6: 'six',
+		7: 'seven',
+		8: 'eight',
+		9: 'nine'
+	}
+
+	// Seperates each digit in the number into an array
+	var digits = number.toString(10).split("").map(function(t){return parseInt(t)})
+	
+	// Iterates through the digits and emojifies them
+	for(var i = 0; i < digits.length; i++){
+		digits[i] = eval('emojic.' + numbers[digits[i]])
+	}
+
+	// Joins the emojified digits into a combined emoji number
+	var emojifiedNumber = digits.join(' ')
+	return emojifiedNumber 
+}
+
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
@@ -89,6 +121,7 @@ if (fileConfigExists) {
     .option('-l, --list [n]', 'List entries', parseInt)
     .option('-m, --moments [value_unit]', 'Relive moments from the past')
     .option('-t, --tag <tag>', 'List entries that contain tag')
+    .option('-c, --count [emojify]', 'Entries count')
     .arguments('<entry>')
     .parse(process.argv)
 
@@ -168,6 +201,16 @@ if (fileConfigExists) {
     }
     entries = requestedEntries.join('')
     console.log(entries)
+    process.exit()
+  }
+
+  if(program.count){
+		var count = getEntries().length
+		if(program.count === 'emojify'){
+			count = emojifyNumber(getEntries().length) + ' ' 
+		}
+		var entries = getEntries().length > 1 || getEntries().length === 0 ? 'entries' : 'entry'
+    console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
     process.exit()
   }
 

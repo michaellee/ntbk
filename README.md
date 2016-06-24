@@ -10,6 +10,10 @@ To install *ntbk* using npm:
 npm install -g ntbk
 ```
 
+## :mailbox_with_mail: Stay in the loop
+
+If you'd like to be notified by email when updates are made to *ntbk* [sign up here][newsletter].
+
 ## Usage
 
 Type `ntbk` into your shell window followed by a message:
@@ -68,7 +72,7 @@ As you can see in the example above, the tag option doesn't need to have the has
 
 The shorthand version of `--tag` is `-t`.
 
-#### -m, --moments \[value_unit\]
+#### -m, --moments \[value\_unit\]
 
 Like a time machine, the `--moments` option allows you to relive your past entries from a year go.
 
@@ -96,11 +100,19 @@ y - year
 
 The shorthand version of `--moments` is `-m`.
 
+#### --count, -c \[emojify\]
+
+See how many entries you've got in your notebook with `--count`.
+
+```
+> ntbk --count
+```
+
 ## Changelog
 
-### v0.4.0 / 2016-06-15
+### v0.5.0 / 2016-06-23
 
-Take a walk down memory lane with *ntbk*'s latest option `--moments`. The `--moments` option is like a time machine, retrieving entries from a year ago from your current day. For more notes on moments, [check out the documentation](https://github.com/michaellee/ntbk#-m---moments-value_unit).
+See how many entries you've captured in your notebook with `--count`.
 
 [See all releases](https://github.com/michaellee/ntbk/releases)
 
@@ -111,3 +123,5 @@ Take a walk down memory lane with *ntbk*'s latest option `--moments`. The `--mom
 ## Make it better
 
 Help make *ntbk* better. If you're handy with some JavaScript and/or Node.js, feel free to create a pull-request. You could also [create a new issue](https://github.com/michaellee/ntbk/issues/new) on GitHub. If you have any questions feel free to shoot me a tweet [@michaelsoolee](https://twitter.com/michaelsoolee).
+
+[newsletter]: http://eepurl.com/b67A_1
