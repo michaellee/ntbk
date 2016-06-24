@@ -12,7 +12,7 @@ npm install -g ntbk
 
 ## :mailbox_with_mail: Stay in the loop
 
-If you'd like to be notified by email when updates are made to `ntbk` [sign up here][newsletter].
+If you'd like to be notified by email when updates are made to *ntbk* [sign up here][newsletter].
 
 ## Usage
 
