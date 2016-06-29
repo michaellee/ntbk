@@ -217,7 +217,17 @@ if (fileConfigExists) {
         }
       }
     }
-    console.log(Object.keys(tags).join('\n'))
+    
+    if (Object.keys(tags).length === 0 && tags.constructor === Object) {
+      console.log('[' + emojic.cry + '  It looks like you aren\'t using any tags in your notebook.]')
+      process.exit()
+    }
+    
+    console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
+    
+    for (var i in tags) {
+      console.log(i + '[' + tags[i] + ']')
+    }
     process.exit()
   }
 
@@ -227,7 +237,7 @@ if (fileConfigExists) {
       count = emojifyNumber(getEntries().length) + ' '
     }
     var entries = getEntries().length > 1 || getEntries().length === 0 ? 'entries' : 'entry'
-    console.log('[' + emojic.star2 + "  You've got " + count + ' ' + entries + ' in your notebook. Keep on writing!]')
+    console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
     process.exit()
   }
 
