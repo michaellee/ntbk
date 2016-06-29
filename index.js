@@ -193,42 +193,44 @@ if (fileConfigExists) {
     process.exit()
   }
 
-  if (program.tag !== true) {
+  if (program.tag) {
     var entries = getEntries()
-    var requestedEntries = []
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].indexOf('#' + program.tag) > -1) {
-        requestedEntries.push(entries[i])
-      }
-    }
-    entries = requestedEntries.join('')
-    console.log(entries)
-    process.exit()
-  } else {
-    var entries = getEntries()
-    var tags = {}
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].indexOf('#') > -1) {
-        var tag = entries[i].match(/#([a-zA-Z]*)/g)
-        if (tags.hasOwnProperty(tag)){
-          tags[tag] += 1
-        } else {
-          tags[tag] = 1
+    
+    if (program.tag !== true) {
+      var requestedEntries = []
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].indexOf('#' + program.tag) > -1) {
+          requestedEntries.push(entries[i])
         }
       }
-    }
-    
-    if (Object.keys(tags).length === 0 && tags.constructor === Object) {
-      console.log('[' + emojic.cry + '  It looks like you aren\'t using any tags in your notebook.]')
+      entries = requestedEntries.join('')
+      console.log(entries)
+      process.exit()
+    } else {
+      var tags = {}
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].indexOf('#') > -1) {
+          var tag = entries[i].match(/#([a-zA-Z]*)/g)
+          if (tags.hasOwnProperty(tag)){
+            tags[tag] += 1
+          } else {
+            tags[tag] = 1
+          }
+        }
+      }
+      
+      if (Object.keys(tags).length === 0 && tags.constructor === Object) {
+        console.log('[' + emojic.cry + '  It looks like you aren\'t using any tags in your notebook.]')
+        process.exit()
+      }
+      
+      console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
+      
+      for (var i in tags) {
+        console.log(i + '[' + tags[i] + ']')
+      }
       process.exit()
     }
-    
-    console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
-    
-    for (var i in tags) {
-      console.log(i + '[' + tags[i] + ']')
-    }
-    process.exit()
   }
 
   if (program.count) {
