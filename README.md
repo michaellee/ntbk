@@ -110,6 +110,10 @@ See how many entries you've got in your notebook with `--count`.
 
 ## Changelog
 
+### v0.5.1 / 2016-06-28
+
+Fixed a bug with `--moments` where the default entry is a year from today.
+
 ### v0.5.0 / 2016-06-23
 
 See how many entries you've captured in your notebook with `--count`.
