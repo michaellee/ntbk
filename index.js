@@ -120,7 +120,7 @@ if (fileConfigExists) {
     .version('v0.5.1')
     .option('-l, --list [n]', 'List entries', parseInt)
     .option('-m, --moments [value_unit]', 'Relive moments from the past')
-    .option('-t, --tag <tag>', 'List entries that contain tag')
+    .option('-t, --tag [tag]', 'List entries that contain tag')
     .option('-c, --count [emojify]', 'Entries count')
     .arguments('<entry>')
     .parse(process.argv)
@@ -193,7 +193,7 @@ if (fileConfigExists) {
     process.exit()
   }
 
-  if (program.tag) {
+  if (program.tag !== true) {
     var entries = getEntries()
     var requestedEntries = []
     for (var i = 0; i < entries.length; i++) {
@@ -203,6 +203,21 @@ if (fileConfigExists) {
     }
     entries = requestedEntries.join('')
     console.log(entries)
+    process.exit()
+  } else {
+    var entries = getEntries()
+    var tags = {}
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].indexOf('#') > -1) {
+        var tag = entries[i].match(/#([a-zA-Z]*)/g)
+        if (tags.hasOwnProperty(tag)){
+          tags[tag] += 1
+        } else {
+          tags[tag] = 1
+        }
+      }
+    }
+    console.log(Object.keys(tags).join('\n'))
     process.exit()
   }
 
