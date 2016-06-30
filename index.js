@@ -117,7 +117,7 @@ if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
 
   program
-    .version('v0.5.1')
+    .version('v0.5.2')
     .option('-l, --list [n]', 'List entries', parseInt)
     .option('-m, --moments [value_unit]', 'Relive moments from the past')
     .option('-t, --tag [tag]', 'List entries that contain tag')
