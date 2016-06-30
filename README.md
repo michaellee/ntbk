@@ -1,4 +1,4 @@
-# ntbk
+# :green_book: ntbk
 
 *ntbk* is a simple command-line journaling tool written in Node.js.
 
@@ -14,7 +14,7 @@ npm install -g ntbk
 
 If you'd like to be notified by email when updates are made to *ntbk* [sign up here][newsletter].
 
-## Usage
+## :keyboard: Usage
 
 Type `ntbk` into your shell window followed by a message:
 
@@ -118,7 +118,7 @@ See how many entries you've got in your notebook with `--count`.
 
 ### v0.5.2 / 2016-06-29
 
-The `--tag` option can now list existing tags from your journal. Run `ntbk --tag` without passing a tag and it'll list all your tags.
+The `--tag` option can now [list existing tags](https://github.com/michaellee/ntbk/tree/develop#-t---tag-tag) from your journal. Run `ntbk --tag` without passing a tag and it'll list all your tags.
 
 ### v0.5.1 / 2016-06-28
 
@@ -137,5 +137,9 @@ See how many entries you've captured in your notebook with `--count`.
 ## Make it better
 
 Help make *ntbk* better. If you're handy with some JavaScript and/or Node.js, feel free to create a pull-request. You could also [create a new issue](https://github.com/michaellee/ntbk/issues/new) on GitHub. If you have any questions feel free to shoot me a tweet [@michaelsoolee](https://twitter.com/michaelsoolee).
+
+## License
+
+[MIT](https://github.com/michaellee/ntbk/blob/master/LICENSE) &copy; [Michael Lee](https://michaelsoolee.com)
 
 [newsletter]: http://eepurl.com/b67A_1
