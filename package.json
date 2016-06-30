@@ -1,6 +1,6 @@
 {
   "name": "ntbk",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A simple command-line journaling tool.",
   "main": "index.js",
   "license": "MIT",
