@@ -117,10 +117,10 @@ if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
 
   program
-    .version('v0.5.1')
+    .version('v0.5.2')
     .option('-l, --list [n]', 'List entries', parseInt)
     .option('-m, --moments [value_unit]', 'Relive moments from the past')
-    .option('-t, --tag <tag>', 'List entries that contain tag')
+    .option('-t, --tag [tag]', 'List entries that contain tag')
     .option('-c, --count [emojify]', 'Entries count')
     .arguments('<entry>')
     .parse(process.argv)
@@ -195,15 +195,55 @@ if (fileConfigExists) {
 
   if (program.tag) {
     var entries = getEntries()
-    var requestedEntries = []
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].indexOf('#' + program.tag) > -1) {
-        requestedEntries.push(entries[i])
+    
+    if (program.tag !== true) {
+      var requestedEntries = []
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].indexOf('#' + program.tag) > -1) {
+          requestedEntries.push(entries[i])
+        }
       }
+      entries = requestedEntries.join('')
+      console.log(entries)
+      process.exit()
+    } else {
+      var tags = {}
+      var longestLength = 0
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].indexOf('#') > -1) {
+          var tag = entries[i].match(/#([a-zA-Z]*)/g)
+          tag = tag[0]
+          longestLength = tag.length > longestLength ? tag.length : longestLength
+          if (tags.hasOwnProperty(tag)){
+            tags[tag] += 1
+          } else {
+            tags[tag] = 1
+          }
+        }
+      }
+      
+      if (Object.keys(tags).length === 0 && tags.constructor === Object) {
+        console.log('[' + emojic.cry + '  It looks like you aren\'t using any tags in your notebook.]')
+        process.exit()
+      }
+      
+      console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
+      
+      /**
+       * Adds correct spacing after tag
+       * @param {String} tag
+       * @return {String} tag with spacing to the right of the tag
+       */
+      var spacedTag = function (tag) {
+        var spacing = longestLength >= tag.length ? longestLength - tag.length : longestLength
+        return tag + new Array(spacing + 2).join(' ')
+      }
+      
+      for (var i in tags) {
+        console.log(spacedTag(i) + '[' + tags[i] + ']')
+      }
+      process.exit()
     }
-    entries = requestedEntries.join('')
-    console.log(entries)
-    process.exit()
   }
 
   if (program.count) {
@@ -212,7 +252,7 @@ if (fileConfigExists) {
       count = emojifyNumber(getEntries().length) + ' '
     }
     var entries = getEntries().length > 1 || getEntries().length === 0 ? 'entries' : 'entry'
-    console.log('[' + emojic.star2 + "  You've got " + count + ' ' + entries + ' in your notebook. Keep on writing!]')
+    console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
     process.exit()
   }
 

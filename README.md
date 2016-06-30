@@ -1,4 +1,4 @@
-# ntbk
+# :green_book: ntbk
 
 *ntbk* is a simple command-line journaling tool written in Node.js.
 
@@ -44,7 +44,7 @@ You can also pass a number to the `--list` option and it will return a subset of
 
 The above uses the shorthand version `-l` of the `--list` option.
 
-#### -t, --tag \<tag\>
+#### -t, --tag \[tag\]
 
 As you write entries in *ntbk* you might want to group similar entries together. You can do this by using *tags*.
 
@@ -69,6 +69,12 @@ To list all *ntbk* entries containing a tag, you can use the `--tag` option:
 ```
 
 As you can see in the example above, the tag option doesn't need to have the hashtag symbol prefixed when passing it a parameter.
+
+You can also get a list of all existing tags in your notebook. Simply use the `--tag` option without passing in a tag as a parameter:
+
+```
+> ntbk --tag
+```
 
 The shorthand version of `--tag` is `-t`.
 
@@ -110,6 +116,10 @@ See how many entries you've got in your notebook with `--count`.
 
 ## Changelog
 
+### v0.5.2 / 2016-06-29
+
+The `--tag` option can now [list existing tags](https://github.com/michaellee/ntbk/tree/develop#-t---tag-tag) from your journal. Run `ntbk --tag` without passing a tag and it'll list all your tags.
+
 ### v0.5.1 / 2016-06-28
 
 Fixed a bug with `--moments` where the default entry is a year from today.
@@ -127,5 +137,9 @@ See how many entries you've captured in your notebook with `--count`.
 ## Make it better
 
 Help make *ntbk* better. If you're handy with some JavaScript and/or Node.js, feel free to create a pull-request. You could also [create a new issue](https://github.com/michaellee/ntbk/issues/new) on GitHub. If you have any questions feel free to shoot me a tweet [@michaelsoolee](https://twitter.com/michaelsoolee).
+
+## License
+
+[MIT](https://github.com/michaellee/ntbk/blob/master/LICENSE) &copy; [Michael Lee](https://michaelsoolee.com)
 
 [newsletter]: http://eepurl.com/b67A_1
