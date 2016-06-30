@@ -208,9 +208,12 @@ if (fileConfigExists) {
       process.exit()
     } else {
       var tags = {}
+      var longestLength = 0
       for (var i = 0; i < entries.length; i++) {
         if (entries[i].indexOf('#') > -1) {
           var tag = entries[i].match(/#([a-zA-Z]*)/g)
+          tag = tag[0]
+          longestLength = tag.length > longestLength ? tag.length : longestLength
           if (tags.hasOwnProperty(tag)){
             tags[tag] += 1
           } else {
@@ -226,8 +229,18 @@ if (fileConfigExists) {
       
       console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
       
+      /**
+       * Adds correct spacing after tag
+       * @param {String} tag
+       * @return {String} tag with spacing to the right of the tag
+       */
+      var spacedTag = function (tag) {
+        var spacing = longestLength >= tag.length ? longestLength - tag.length : longestLength
+        return tag + new Array(spacing + 2).join(' ')
+      }
+      
       for (var i in tags) {
-        console.log(i + '[' + tags[i] + ']')
+        console.log(spacedTag(i) + '[' + tags[i] + ']')
       }
       process.exit()
     }
