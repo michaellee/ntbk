@@ -14,7 +14,7 @@ npm install -g ntbk
 
 If you'd like to be notified by email when updates are made to *ntbk* [sign up here][newsletter].
 
-## :keyboard: Usage
+## Usage
 
 Type `ntbk` into your shell window followed by a message:
 
