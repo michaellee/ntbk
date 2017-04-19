@@ -10,10 +10,6 @@ To install *ntbk* using npm:
 npm install -g ntbk
 ```
 
-## :mailbox_with_mail: Stay in the loop
-
-If you'd like to be notified by email when updates are made to *ntbk* [sign up here][newsletter].
-
 ## Usage
 
 Type `ntbk` into your shell window followed by a message:
@@ -116,6 +112,10 @@ See how many entries you've got in your notebook with `--count`.
 
 ## Changelog
 
+### v0.5.3 / 2017-07-18
+
+Added information on how to hack on *ntbk* from local machine.
+
 ### v0.5.2 / 2016-06-29
 
 The `--tag` option can now [list existing tags](https://github.com/michaellee/ntbk/tree/develop#-t---tag-tag) from your journal. Run `ntbk --tag` without passing a tag and it'll list all your tags.
@@ -137,6 +137,8 @@ See how many entries you've captured in your notebook with `--count`.
 ## Make it better
 
 Help make *ntbk* better. If you're handy with some JavaScript and/or Node.js, feel free to create a pull-request. You could also [create a new issue](https://github.com/michaellee/ntbk/issues/new) on GitHub. If you have any questions feel free to shoot me a tweet [@michaelsoolee](https://twitter.com/michaelsoolee).
+
+To hack on *ntbk* on your local machine, first clone the repo, then from within your local copy, type `npm link`. This will make a symlink to your local copy.
 
 ## License
 
