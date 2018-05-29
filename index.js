@@ -5,6 +5,11 @@ var co = require('co')
 var prompt = require('co-prompt')
 var emojic = require('emojic')
 
+var numbersUtilities = require('./lib/utilities/numbers')
+var stringUtilities = require('./lib/utilities/string')
+var timeUtilities = require('./lib/utilities/time')
+var entriesUtilities = require('./lib/utilities/entries')
+
 // Get user's home directory
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
 var defaultConfigPath = home + '/.ntbk_config'
@@ -22,96 +27,6 @@ try {
   fileConfigExists = false
 }
 
-/**
- * Pad value with zero if it is less than 10
- * @param {Number} value
- * @return passes the value through if it is greater 9 and retains type number,
- * if value is less than 10 than a string is returned
- */
-var addZero = function (value) {
-  value = value < 10 ? '0' + value : value
-  return value
-}
-
-/**
- * Returns current date and time in format of YYYY-MM-DD HH:MM
- * @return {String} now
- */
-var getTime = function () {
-  var timestamp = new Date()
-  var now = timestamp.getFullYear() + '-' + addZero((timestamp.getMonth() + 1)) + '-' + addZero(timestamp.getDate()) + ' ' + addZero(timestamp.getHours()) + ':' + addZero(timestamp.getMinutes())
-  return now
-}
-
-var isNumber = function (n) {
-  return !isNaN(parseFloat(n)) && isFinite(n)
-}
-
-/**
- * Returns all entries as an array
- * @return {Array} lines
- */
-var getEntries = function () {
-  var entries = fs.readFileSync(obj.notebooks.default, 'utf8')
-  // Regex to split the string by entries into an array
-  var lines = entries.split(/(\d{4}-\d{2}-\d{2}(?:.|[\r\n])+?)(?=\d{4}-\d{2}-\d{2})/)
-  // Regex seems to insert a blank string between each entry, this removes them
-  lines = lines.filter(function (v) {return v !== ''})
-  return lines
-}
-
-/**
- * Returns random integer
- * @param {Number} min
- * @param {Number} max
- * @return {Number}
- */
-var getRandomInt = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-/**
- * Pluralizes unit name
- * @param {Number} value
- * @param {String} unit
- * @return {String} units or unit
- */
-var pluralizeUnit = function (value, unit) {
-  return value > 1 ? unit + 's' : unit
-}
-
-/**
- * Emojifies number
- * @param {Number} number
- * @return {String} emojified number
- */
-var emojifyNumber = function (number) {
-  var numbers = {
-    0: 'zero',
-    1: 'one',
-    2: 'two',
-    3: 'three',
-    4: 'four',
-    5: 'five',
-    6: 'six',
-    7: 'seven',
-    8: 'eight',
-    9: 'nine'
-  }
-
-  // Seperates each digit in the number into an array
-  var digits = number.toString(10).split('').map(function (t) {return parseInt(t)})
-
-  // Iterates through the digits and emojifies them
-  for (var i = 0; i < digits.length; i++) {
-    digits[i] = eval('emojic.' + numbers[digits[i]])
-  }
-
-  // Joins the emojified digits into a combined emoji number
-  var emojifiedNumber = digits.join(' ')
-  return emojifiedNumber
-}
-
 // If config exists, write entry into existing notebook
 if (fileConfigExists) {
   var obj = JSON.parse(fs.readFileSync(defaultConfigPath, 'utf8'))
@@ -126,10 +41,10 @@ if (fileConfigExists) {
     .parse(process.argv)
 
   if (program.list) {
-    var entries = getEntries()
-    // If the list option is passed a number, get the last number of entries 
+    var entries = entriesUtilities.getEntries(obj)
+    // If the list option is passed a number, get the last number of entries
     // starting from the passed number, else list all entries
-    if (isNumber(program.list)) {
+    if (numbersUtilities.isNumber(program.list)) {
       // Determines the starting point from which to get all entries
       var start = entries.length - program.list
       var requestedEntries = []
@@ -146,7 +61,7 @@ if (fileConfigExists) {
   }
 
   if (program.moments) {
-    var entries = getEntries()
+    var entries = entriesUtilities.getEntries(obj)
     var dateQuery = new Date()
     var year = dateQuery.getFullYear()
     var month = dateQuery.getMonth() + 1
@@ -177,15 +92,15 @@ if (fileConfigExists) {
     } else {
       year -= query[0]
     }
-    dateQuery = year + '-' + addZero(month) + '-' + addZero(date)
+    dateQuery = year + '-' + stringUtilities.addZero(month) + '-' + stringUtilities.addZero(date)
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].indexOf(dateQuery) > -1) {
         requestedEntries.push(entries[i])
       }
     }
     if (requestedEntries.length == 0) {
-      console.log('[' + emojic.tada + "  It looks like you don't have any moments from " + query[0] + ' ' + pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
-      entries = entries[getRandomInt(0, entries.length - 1)]
+      console.log('[' + emojic.tada + "  It looks like you don't have any moments from " + query[0] + ' ' + stringUtilities.pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
+      entries = entries[numbersUtilities.getRandomInt(0, entries.length - 1)]
     } else {
       entries = requestedEntries.join('')
     }
@@ -194,8 +109,8 @@ if (fileConfigExists) {
   }
 
   if (program.tag) {
-    var entries = getEntries()
-    
+    var entries = entriesUtilities.getEntries(obj)
+
     if (program.tag !== true) {
       var requestedEntries = []
       for (var i = 0; i < entries.length; i++) {
@@ -221,14 +136,14 @@ if (fileConfigExists) {
           }
         }
       }
-      
+
       if (Object.keys(tags).length === 0 && tags.constructor === Object) {
         console.log('[' + emojic.cry + '  It looks like you aren\'t using any tags in your notebook.]')
         process.exit()
       }
-      
+
       console.log('[' + emojic.label + '  Here is a list of all the tags you\'ve used in your notebook.]')
-      
+
       /**
        * Adds correct spacing after tag
        * @param {String} tag
@@ -238,7 +153,7 @@ if (fileConfigExists) {
         var spacing = longestLength >= tag.length ? longestLength - tag.length : longestLength
         return tag + new Array(spacing + 2).join(' ')
       }
-      
+
       for (var i in tags) {
         console.log(spacedTag(i) + '[' + tags[i] + ']')
       }
@@ -247,11 +162,11 @@ if (fileConfigExists) {
   }
 
   if (program.count) {
-    var count = getEntries().length
+    var count = entriesUtilities.getEntries(obj).length
     if (program.count === 'emojify') {
-      count = emojifyNumber(getEntries().length) + ' '
+      count = numbersUtilities.emojifyNumber(entriesUtilities.getEntries(obj).length) + ' '
     }
-    var entries = getEntries().length > 1 || getEntries().length === 0 ? 'entries' : 'entry'
+    var entries = entriesUtilities.getEntries(obj).length > 1 || entriesUtilities.getEntries(obj).length === 0 ? 'entries' : 'entry'
     console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
     process.exit()
   }
@@ -259,18 +174,18 @@ if (fileConfigExists) {
   if (!program.args.length) {
     co(function * () {
       var entry = yield prompt('[' + emojic.pencil2 + "  Start writing your entry. When you're done press return to save your entry]\n")
-      fs.appendFileSync(obj.notebooks.default, getTime() + ' ' + entry + '\n\n')
+      fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
       console.log('[' + emojic.v + '  Your entry was added to your notebook]')
       process.exit()
     })
   } else {
     var entry = program.args.join(' ')
-    fs.appendFileSync(obj.notebooks.default, getTime() + ' ' + entry + '\n\n')
+    fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
     console.log('[' + emojic.v + '  Your entry was added to your notebook]')
   }
 }
 // Else the config files doesn't exist, specify where to write entries,
-// then write the first entry 
+// then write the first entry
 else {
   co(function * () {
     var notebookPath = yield prompt(emojic.greenBook + '  Where would you like to store your notebook? (leave blank for ' + home + '/notebook.txt): ')
@@ -281,10 +196,10 @@ else {
     // Check to see if the file already exists
     fs.stat(newConfigFile.notebooks.default, function (err) {
       if (!err) {
-        fs.appendFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
+        fs.appendFileSync(newConfigFile.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your entry was added to your notebook]')
       } else {
-        fs.writeFileSync(newConfigFile.notebooks.default, getTime() + ' ' + entry + '\n\n')
+        fs.writeFileSync(newConfigFile.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
       }
       process.exit()
