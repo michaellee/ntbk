@@ -5,10 +5,12 @@ var co = require('co')
 var prompt = require('co-prompt')
 var emojic = require('emojic')
 
-var numbersUtilities = require('./lib/utilities/numbers')
+const { getRandomInt,
+        isNumber,
+        emojifyNumber } = require('./lib/utilities/numbers')
 var stringUtilities = require('./lib/utilities/string')
 var timeUtilities = require('./lib/utilities/time')
-var entriesUtilities = require('./lib/utilities/entries')
+const { getEntries } = require('./lib/utilities/entries')
 
 // Get user's home directory
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
@@ -41,14 +43,14 @@ if (fileConfigExists) {
     .parse(process.argv)
 
   if (program.list) {
-    var entries = entriesUtilities.getEntries(obj)
+    let entries = getEntries(obj)
     // If the list option is passed a number, get the last number of entries
     // starting from the passed number, else list all entries
-    if (numbersUtilities.isNumber(program.list)) {
+    if (isNumber(program.list)) {
       // Determines the starting point from which to get all entries
-      var start = entries.length - program.list
-      var requestedEntries = []
-      for (var i = start; i <= entries.length; i++) {
+      const start = entries.length - program.list
+      let requestedEntries = []
+      for (let i = start; i <= entries.length; i++) {
         requestedEntries.push(entries[i])
       }
       // Combine all entries back into a string
@@ -61,7 +63,7 @@ if (fileConfigExists) {
   }
 
   if (program.moments) {
-    var entries = entriesUtilities.getEntries(obj)
+    var entries = getEntries(obj)
     var dateQuery = new Date()
     var year = dateQuery.getFullYear()
     var month = dateQuery.getMonth() + 1
@@ -100,7 +102,7 @@ if (fileConfigExists) {
     }
     if (requestedEntries.length == 0) {
       console.log('[' + emojic.tada + "  It looks like you don't have any moments from " + query[0] + ' ' + stringUtilities.pluralizeUnit(query[0], units[query[1]]) + " ago...so here's a random one]")
-      entries = entries[numbersUtilities.getRandomInt(0, entries.length - 1)]
+      entries = entries[getRandomInt(0, entries.length - 1)]
     } else {
       entries = requestedEntries.join('')
     }
@@ -109,7 +111,7 @@ if (fileConfigExists) {
   }
 
   if (program.tag) {
-    var entries = entriesUtilities.getEntries(obj)
+    var entries = getEntries(obj)
 
     if (program.tag !== true) {
       var requestedEntries = []
@@ -162,11 +164,11 @@ if (fileConfigExists) {
   }
 
   if (program.count) {
-    var count = entriesUtilities.getEntries(obj).length
+    var count = getEntries(obj).length
     if (program.count === 'emojify') {
-      count = numbersUtilities.emojifyNumber(entriesUtilities.getEntries(obj).length) + ' '
+      count = emojifyNumber(getEntries(obj).length) + ' '
     }
-    var entries = entriesUtilities.getEntries(obj).length > 1 || entriesUtilities.getEntries(obj).length === 0 ? 'entries' : 'entry'
+    var entries = getEntries(obj).length > 1 || getEntries(obj).length === 0 ? 'entries' : 'entry'
     console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
     process.exit()
   }
