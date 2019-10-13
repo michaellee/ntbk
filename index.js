@@ -5,12 +5,16 @@ var co = require('co')
 var prompt = require('co-prompt')
 var emojic = require('emojic')
 
+const readline = require('readline')
+
 const { getRandomInt,
         isNumber,
         emojifyNumber } = require('./lib/utilities/numbers')
 var stringUtilities = require('./lib/utilities/string')
 var timeUtilities = require('./lib/utilities/time')
 const { getEntries } = require('./lib/utilities/entries')
+
+const { success } = require('./lib/utilities/messages')
 
 // Get user's home directory
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
@@ -174,16 +178,32 @@ if (fileConfigExists) {
   }
 
   if (!program.args.length) {
-    co(function * () {
-      var entry = yield prompt('[' + emojic.pencil2 + "  Start writing your entry. When you're done press return to save your entry]\n")
-      fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
-      console.log('[' + emojic.v + '  Your entry was added to your notebook]')
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    })
+
+    let entry = []
+
+    rl.question(`[${emojic.pencil2} Start writing your entry. When you're done, press CTRL + C to save your entry]\n`, (input) => {
+      entry.push(input)
+    })
+
+    rl.on('line', (input) => {
+      entry.push(input)
+    });
+
+    rl.on('SIGINT', () => {
+      entry = entry.join('\n')
+      fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' \n' + entry + '\n\n')
+      success()
+      rl.pause()
       process.exit()
     })
   } else {
     var entry = program.args.join(' ')
     fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
-    console.log('[' + emojic.v + '  Your entry was added to your notebook]')
+    success()
   }
 }
 // Else the config files doesn't exist, specify where to write entries,
