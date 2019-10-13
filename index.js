@@ -14,7 +14,9 @@ var stringUtilities = require('./lib/utilities/string')
 var timeUtilities = require('./lib/utilities/time')
 const { getEntries } = require('./lib/utilities/entries')
 
-const { success } = require('./lib/utilities/messages')
+const { 
+  successMessage,
+  entryCountMessage } = require('./lib/utilities/messages')
 
 // Get user's home directory
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
@@ -168,12 +170,12 @@ if (fileConfigExists) {
   }
 
   if (program.count) {
-    var count = getEntries(obj).length
+    let count = getEntries(obj).length
     if (program.count === 'emojify') {
-      count = emojifyNumber(getEntries(obj).length) + ' '
+      count = `${emojifyNumber(count)} `
     }
-    var entries = getEntries(obj).length > 1 || getEntries(obj).length === 0 ? 'entries' : 'entry'
-    console.log('[' + emojic.star2 + '  You\'ve got ' + count + ' ' + entries + ' in your notebook. Keep on writing!]')
+    let entries = getEntries(obj).length > 1 || getEntries(obj).length === 0 ? 'entries' : 'entry'
+    entryCountMessage(count, entries)
     process.exit()
   }
 
@@ -196,14 +198,14 @@ if (fileConfigExists) {
     rl.on('SIGINT', () => {
       entry = entry.join('\n')
       fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' \n' + entry + '\n\n')
-      success()
+      successMessage()
       rl.pause()
       process.exit()
     })
   } else {
     var entry = program.args.join(' ')
     fs.appendFileSync(obj.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
-    success()
+    successMessage()
   }
 }
 // Else the config files doesn't exist, specify where to write entries,
@@ -219,7 +221,7 @@ else {
     fs.stat(newConfigFile.notebooks.default, function (err) {
       if (!err) {
         fs.appendFileSync(newConfigFile.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
-        console.log('[' + emojic.v + '  Your entry was added to your notebook]')
+        successMessage()
       } else {
         fs.writeFileSync(newConfigFile.notebooks.default, timeUtilities.getTime() + ' ' + entry + '\n\n')
         console.log('[' + emojic.v + '  Your first entry was added to your notebook]')
